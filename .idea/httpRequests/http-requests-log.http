@@ -1,0 +1,14 @@
+GET http://localhost:8080/v1/records
+Accept: */*
+Cache-Control: no-cache
+
+<> 2021-03-21T052301.200.json
+
+###
+
+GET http://localhost:8080/v1/records
+Accept: */*
+Cache-Control: no-cache
+
+###
+
