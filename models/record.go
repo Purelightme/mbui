@@ -1,8 +1,7 @@
 package models
 
 import (
-	"database/sql"
-	"encoding/json"
+	"database/sql/driver"
 	"github.com/jinzhu/gorm"
 )
 
@@ -23,16 +22,56 @@ import (
 //        "price": 20
 //    }
 //}
+
+//{
+//    "type": "table-alter",
+//    "database": "mbui",
+//    "table": "qq",
+//    "old": {
+//        "database": "mbui",
+//        "charset": "utf8mb4",
+//        "table": "qq",
+//        "columns": [
+//            {
+//                "type": "int",
+//                "name": "id11",
+//                "signed": false
+//            }
+//        ],
+//        "primary-key": [
+//            "id11"
+//        ]
+//    },
+//    "def": {
+//        "database": "mbui",
+//        "charset": "utf8mb4",
+//        "table": "aaa",
+//        "columns": [
+//            {
+//                "type": "int",
+//                "name": "id11",
+//                "signed": false
+//            }
+//        ],
+//        "primary-key": [
+//            "id11"
+//        ]
+//    },
+//    "ts": 1616728512000,
+//    "sql": "RENAME TABLE `mbui`.`qq` TO `mbui`.`aaa`"
+//}
 type Record struct {
 	gorm.Model
 	Database string `json:"database"`
-	Table string `json:"table"`
-	Type string `json:"type"`
-	Ts int `json:"ts"`
-	Xid int `json:"xid"`
-	Commit bool `json:"commit"`
-	Data Data `json:"data" gorm:"type:json"`
-	Old MyNullString `json:"old" gorm:"type:json default:null"`
+	Table    string `json:"table"`
+	Type     string `json:"type"`
+	Ts       int64  `json:"ts" gorm:"type:bigint(15)"`
+	Xid      int    `json:"xid"`
+	Commit   bool   `json:"commit"`
+	Data     Data   `json:"data" gorm:"type:json"`
+	Old      Data   `json:"old" gorm:"type:json"`
+	Def      Data   `json:"def" gorm:"type:json"`
+	Sql      string `json:"sql" gorm:"type:text"`
 }
 
 type Data string
@@ -46,13 +85,19 @@ func (t *Data) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-type MyNullString struct {
-	sql.NullString
+func (t Data) Value() (driver.Value, error) {
+	//add this
+	if string(t) == "" {
+		return string("[]"), nil
+	}
+	return string(t), nil
 }
 
-func (ns MyNullString) MarshalJSON()(b []byte, err error) {
-	if ns.String == "" && !ns.Valid {
-		return []byte("null"), nil
+func (t *Data) Scan(src interface{}) error {
+	s, ok := src.([]byte)
+	if !ok {
+		return nil
 	}
-	return json.Marshal(ns.String)
+	*t = Data(s)
+	return nil
 }
