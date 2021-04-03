@@ -78,7 +78,7 @@ func List(c *gin.Context)  {
 	recordDb.Count(&count)
 
 	list := []models.Record{}
-	recordDb.Offset((intPage - 1)*intPageSize).Limit(intPageSize).Find(&list)
+	recordDb.Order("id DESC").Offset((intPage - 1)*intPageSize).Limit(intPageSize).Find(&list)
 
 	c.JSON(http.StatusOK,gin.H{
 		"data": list,
