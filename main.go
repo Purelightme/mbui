@@ -12,6 +12,9 @@ import (
 	"strconv"
 )
 
+//maxwell --user='root' --password='root' --host='127.0.0.1' --port=33060 --producer=redis --redis_type=lpush --output_ddl=true
+//maxwell --user='root' --password='root' --host='127.0.0.1' --port=33060 --producer=stdout
+
 var Db *gorm.DB
 
 func init()  {

@@ -11,7 +11,7 @@
     <script src="https://cdn.bootcdn.net/ajax/libs/iview/3.5.5-rc.1/iview.min.js"></script>
     <script src="https://cdn.bootcdn.net/ajax/libs/axios/0.21.1/axios.min.js"></script>
     <style>
-        #app{
+        #app {
             padding: 60px;
         }
     </style>
@@ -41,9 +41,11 @@
             <i-col :span="6">
                 <form-item label="类型">
                     <i-select v-model="params.type">
-                        <i-option key="insert" label="insert" value="insert">insert</i-option>
-                        <i-option key="update" label="update" value="update">update</i-option>
-                        <i-option key="delete" label="delete" value="delete">delete</i-option>
+                        <i-option v-for="(item,index) in typeOptions" :key="item" :label="item" :value="item"></i-option>
+                        <!--                        <i-option key="insert" label="insert" value="insert">insert</i-option>-->
+                        <!--                        <i-option key="update" label="update" value="update">update</i-option>-->
+                        <!--                        <i-option key="delete" label="delete" value="delete">delete</i-option>-->
+                        <!--                        <i-option key="database-create" label="database-create" value="database-create">database-create</i-option>-->
                     </i-select>
                 </form-item>
             </i-col>
@@ -83,7 +85,21 @@
     new Vue({
         el: "#app",
         delimiters: ['${', '}'],
+
         data: {
+            typeOptions:[
+                "insert",
+                "update",
+                "delete",
+                "database-create",
+                "database-alter",
+                "database-drop",
+                "table-create",
+                "table-alter",
+                "table-drop",
+                "bootstrap-insert"
+            ],
+
             columns: [
                 {
                     title: "ID",
@@ -113,6 +129,10 @@
                     title: "Old",
                     key: "old"
                 },
+                {
+                    title: "Sql",
+                    key: "sql"
+                },
             ],
             data: [],
             total: 0,
@@ -125,6 +145,7 @@
                 ts: '',
                 new: '',
                 old: '',
+                sql: '',
             }
         },
         methods: {
@@ -140,7 +161,7 @@
                 this.database = database
                 this.getList()
             },
-            reset(){
+            reset() {
                 this.params.database = ""
                 this.params.table = ""
                 this.params.type = ""
