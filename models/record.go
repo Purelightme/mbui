@@ -5,61 +5,6 @@ import (
 	"github.com/jinzhu/gorm"
 )
 
-//{
-//    "database": "bookstore",
-//    "table": "books",
-//    "type": "update",
-//    "ts": 1616145995,
-//    "xid": 1608,
-//    "commit": true,
-//    "data": {
-//        "id": 4,
-//        "book": "PHP Practise",
-//        "price": 10
-//    },
-//    "old": {
-//        "book": "PHP AND Mysql3",
-//        "price": 20
-//    }
-//}
-
-//{
-//    "type": "table-alter",
-//    "database": "mbui",
-//    "table": "qq",
-//    "old": {
-//        "database": "mbui",
-//        "charset": "utf8mb4",
-//        "table": "qq",
-//        "columns": [
-//            {
-//                "type": "int",
-//                "name": "id11",
-//                "signed": false
-//            }
-//        ],
-//        "primary-key": [
-//            "id11"
-//        ]
-//    },
-//    "def": {
-//        "database": "mbui",
-//        "charset": "utf8mb4",
-//        "table": "aaa",
-//        "columns": [
-//            {
-//                "type": "int",
-//                "name": "id11",
-//                "signed": false
-//            }
-//        ],
-//        "primary-key": [
-//            "id11"
-//        ]
-//    },
-//    "ts": 1616728512000,
-//    "sql": "RENAME TABLE `mbui`.`qq` TO `mbui`.`aaa`"
-//}
 type Record struct {
 	gorm.Model
 	Database string `json:"database"`
@@ -71,14 +16,14 @@ type Record struct {
 	Data     Data   `json:"data" gorm:"type:json"`
 	Old      Data   `json:"old" gorm:"type:json"`
 	Def      Data   `json:"def" gorm:"type:json"`
-	Sql      string `json:"sql" gorm:"type:text"`
+	Query    string `json:"query" gorm:"type:text"`
 }
 
 type Data string
 
-func (t *Data) MarshalJSON() ([]byte, error) {
-	return []byte(*t), nil
-}
+//func (t *Data) MarshalJSON() ([]byte, error) {
+//	return []byte(*t), nil
+//}
 
 func (t *Data) UnmarshalJSON(data []byte) error {
 	*t = Data(data)
@@ -86,7 +31,6 @@ func (t *Data) UnmarshalJSON(data []byte) error {
 }
 
 func (t Data) Value() (driver.Value, error) {
-	//add this
 	if string(t) == "" {
 		return string("[]"), nil
 	}

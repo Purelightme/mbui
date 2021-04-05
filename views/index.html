@@ -42,10 +42,6 @@
                 <form-item label="类型">
                     <i-select v-model="params.type">
                         <i-option v-for="(item,index) in typeOptions" :key="item" :label="item" :value="item"></i-option>
-                        <!--                        <i-option key="insert" label="insert" value="insert">insert</i-option>-->
-                        <!--                        <i-option key="update" label="update" value="update">update</i-option>-->
-                        <!--                        <i-option key="delete" label="delete" value="delete">delete</i-option>-->
-                        <!--                        <i-option key="database-create" label="database-create" value="database-create">database-create</i-option>-->
                     </i-select>
                 </form-item>
             </i-col>
@@ -54,17 +50,12 @@
         <i-row>
             <i-col :span="6">
                 <form-item label="时间">
-                    <i-input v-model="params.ts"></i-input>
+                    <i-input v-model="params.ts" type="date"></i-input>
                 </form-item>
             </i-col>
             <i-col :span="6">
-                <form-item label="Data">
-                    <i-input v-model="params.new"></i-input>
-                </form-item>
-            </i-col>
-            <i-col :span="6">
-                <form-item label="Old">
-                    <i-input v-model="params.old"></i-input>
+                <form-item label="Sql">
+                    <i-input v-model="params.sql"></i-input>
                 </form-item>
             </i-col>
         </i-row>
@@ -118,6 +109,10 @@
                     key: "type"
                 },
                 {
+                    title: "SQL",
+                    key: "query"
+                },
+                {
                     title: "时间",
                     key: "ts"
                 },
@@ -129,10 +124,6 @@
                     title: "Old",
                     key: "old"
                 },
-                {
-                    title: "Sql",
-                    key: "sql"
-                },
             ],
             data: [],
             total: 0,
@@ -143,8 +134,6 @@
                 table: '',
                 type: '',
                 ts: '',
-                new: '',
-                old: '',
                 sql: '',
             }
         },
@@ -157,17 +146,13 @@
                 this.pageSize = pageSize
                 this.getList()
             },
-            changeDatabase(database) {
-                this.database = database
-                this.getList()
-            },
             reset() {
                 this.params.database = ""
                 this.params.table = ""
                 this.params.type = ""
                 this.params.ts = ""
-                this.params.new = ""
-                this.params.old = ""
+                this.params.sql = ""
+                this.getList()
             },
             getList() {
                 axios.get("/v1/records", {
@@ -178,8 +163,7 @@
                         table: this.params.table,
                         ts: this.params.ts,
                         type: this.params.type,
-                        data: this.params.new,
-                        old: this.params.old
+                        sql: this.params.sql
                     }
                 }).then((res) => {
                     this.data = res.data.data

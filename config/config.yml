@@ -1,0 +1,22 @@
+minotor:
+  host: 127.0.0.1
+  port: 3306
+  user: maxwell
+  password: maxwell
+
+persist:
+  host: 127.0.0.1
+  port: 33060
+  user: root
+  password: root
+  database: mbui
+
+redis:
+  host: 127.0.0.1
+  port: 6379
+  password:
+  database: 0
+  key: maxwell
+
+web:
+  port: 8080
