@@ -16,6 +16,12 @@ func main()  {
 
 	go sync.Start()
 
+	debug := viper.GetBool("debug")
+
+	if !debug {
+		gin.SetMode(gin.ReleaseMode)
+	}
+
 	r := gin.Default()
 
 	r.SetHTMLTemplate(template.Must(template.ParseGlob("views/*")))
