@@ -24,6 +24,8 @@ maxwell --user='maxwell' --password='maxwell' --host='127.0.0.1' --port=3306 --p
 
 查看参数：./mbui --help
 
+![help](help.png)
+
 > 主要是自定义 mysql 和 redis 的配置。
 
 访问：http://127.0.0.1:8080/v1/
